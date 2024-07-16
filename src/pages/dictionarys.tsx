@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useState } from "react";
 import { Pagination } from "@mui/material";
+import { Search, SelectVoca } from "@/assets/images";
 
 export const Dictionary = () => {
   const category = ["경영", "경제", "공공", "과학", "금융", "사회"];
@@ -10,36 +11,27 @@ export const Dictionary = () => {
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
-  const selected = {
-    backgroundColor: `#EDF2FD`,
-    color: `#ffff`,
-  };
-  const selectedWord = {
-    border: `1px solid #6A74C9`,
-  };
 
   return (
     <MainContainer>
       <ListContainer>
         <CatContainer>
-          <CatItem>전체</CatItem>
+          <Tag $isSelect={true}>전체</Tag>
           {category.map((v, i) => (
-            <CatItem style={type === v ? selected : {}} key={i + 1} onClick={() => setType(v)}>
+            <Tag $isSelect={false} key={i + 1} onClick={() => setType(v)}>
               {v}
-            </CatItem>
+            </Tag>
           ))}
         </CatContainer>
         <SearchContainer>
           <SearchBox value={keyword} onChange={e => setKeyword(e.target.value)} placeholder="검색어를 입력하세요" />
-          <button>
-            <img src={"/icons/feed/ic_search.svg"} alt="검색 버튼" />
-          </button>
+          <SearchImg src={Search} alt="검색 버튼" height={24} />
         </SearchContainer>
         <div className="wordlist">
           {wordArr.map((v, i) => (
-            <WordContainer style={currentWord === v ? selectedWord : {}} key={i} onClick={() => setCurrentWord(v)}>
-              <WordCat>{v.type}</WordCat>
-              <div>{v.word}</div>
+            <WordContainer key={i} onClick={() => setCurrentWord(v)}>
+              <WordCat>{"fasdf"}</WordCat>
+              <div>{"asd"}</div>
             </WordContainer>
           ))}
         </div>
@@ -53,7 +45,7 @@ export const Dictionary = () => {
       <DetailContainer>
         {currentWord.word === "" ? (
           <>
-            <img src={"/icons/quiz/selectVoca.png"} alt="" />
+            <img src={SelectVoca} alt="" />
             <div
               style={{
                 fontWeight: "600",
@@ -74,13 +66,13 @@ export const Dictionary = () => {
                   fontSize: "20px",
                 }}
               >
-                {currentWord.type}
+                asdf
               </WordCat>
               <div className="word" style={currentWord.word.length > 30 ? { fontSize: "24px" } : {}}>
                 {currentWord.word}
               </div>
             </div>
-            <div className="meaning">{currentWord.meaning}</div>
+            <div className="meaning">asdf</div>
           </>
         )}
       </DetailContainer>
@@ -89,51 +81,60 @@ export const Dictionary = () => {
 };
 
 const MainContainer = styled.div`
-  height: 100%;
+  height: 100vh;
   display: flex;
-  padding: 0px 70px;
+  justify-content: center;
   align-items: center;
-  border-radius: 16px;
+  margin-left: 276px;
+  align-items: center;
 `;
 
 const ListContainer = styled.div`
   display: flex;
-  box-sizing: border-box;
+  padding: 28px 40px;
   flex-direction: column;
   align-items: center;
   background-color: #ffff;
   width: 507px;
   height: 618px;
-  border-radius: 16px;
+  border-radius: 8px;
   border: 1px solid #dfe0e5;
-  margin-right: 36px;
+  margin-right: 48px;
   .wordlist {
     margin-bottom: 12px;
     height: 457px;
   }
 `;
 
+const SearchImg = styled.img`
+  position: absolute;
+  left: 10px;
+`;
+
 const CatContainer = styled.div`
-  margin: 16px 0 12px;
-  width: 466px;
+  margin: 16px 0 12px 0;
+  width: 100%;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 `;
 
-const CatItem = styled.button`
-  width: 53px;
-  height: 26px;
-  border: 1px solid #6a74c9;
-  background-color: #d0d1ff;
-  border-radius: 16px;
-  color: #6a74c9;
-  font-size: 12px;
-  &:focus {
-    background-color: #6a74c9;
-    color: #ffff;
-  }
+const Tag = styled.div<{ $isSelect: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 4px;
+
+  cursor: pointer;
+  ${({ $isSelect }) =>
+    $isSelect &&
+    css`
+      background-color: #6a74c9;
+      color: white;
+    `}
 `;
 
 const DetailContainer = styled.div`
@@ -173,18 +174,15 @@ const DetailContainer = styled.div`
 
 const SearchContainer = styled.div`
   box-sizing: border-box;
-  padding: 0 12px;
+  padding-left: 40px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  width: 466px;
-  height: 36px;
+  width: 100%;
+  height: 48px;
   border: 1px solid #6a74c9;
-  border-radius: 16px;
-  button {
-    border: none;
-    background-color: transparent;
-  }
+  border-radius: 4px;
+  position: relative;
 `;
 
 const SearchBox = styled.input`
@@ -192,7 +190,7 @@ const SearchBox = styled.input`
   height: 90%;
   border: none;
   outline: none;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 const WordContainer = styled.button`

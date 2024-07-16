@@ -6,15 +6,15 @@ export const NavBar = () => {
   return (
     <Nav>
       <StyledLink to="/news">
-        <img src={Home} alt="news" />
+        <img src={Home} alt="news" width={28} />
         뉴스
       </StyledLink>
       <StyledLink to="/feed">
-        <img src={Feed} alt="feed" />
+        <img src={Feed} alt="feed" width={28} />
         피드
       </StyledLink>
       <StyledLink to="/dictionary">
-        <img src={Dictionary} alt="dictionary" />
+        <img src={Dictionary} alt="dictionary" width={28} />
         사전
       </StyledLink>
     </Nav>
@@ -24,7 +24,7 @@ export const NavBar = () => {
 const Nav = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 40px;
   font-size: 1rem;
   width: 100%;
 `;
@@ -36,6 +36,7 @@ const StyledLink = styled(NavLink)`
   display: flex;
   align-items: center;
   margin-left: 20px;
+  font-size: 16px;
   gap: 12px;
 
   &.active {

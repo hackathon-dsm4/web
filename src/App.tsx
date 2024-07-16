@@ -4,7 +4,7 @@ import { NavigationBar } from "@/components";
 function App() {
   return (
     <>
-      {/* <NavigationBar /> */}
+      <NavigationBar />
       <Router />
     </>
   );

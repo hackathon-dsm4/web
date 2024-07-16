@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { News, Login, Dictionary } from "@/pages";
+import { News, Login, Dictionary, Mypage } from "@/pages";
 
 function Router() {
   return (

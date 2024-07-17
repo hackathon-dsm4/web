@@ -90,7 +90,7 @@ const Article = styled(Link)`
 `;
 
 const Label = styled.div`
-  background-color: #a01d1d;
+  background-color: #6a74c9;
   width: 88px;
   height: 36px;
   border-radius: 4px;

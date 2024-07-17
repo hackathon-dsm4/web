@@ -1,94 +1,31 @@
 import { styled } from "styled-components";
 import ReactWordcloud, { Optional, Options } from "react-wordcloud";
+import { useGetWordCloud } from "@/apis/cloud";
+import { useNewsCategory } from "@/stores";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const WordCloudWords = () => {
-  // const [words, setWords] = useState([]);
+  const { date, category, text, setText } = useNewsCategory();
+  const queryclient = useQueryClient();
+  const { data: wordCloud } = useGetWordCloud(date, category);
 
-  const words = [
-    {
-      text: "식스틴",
-      value: 64,
-    },
-    {
-      text: "암스틸",
-      value: 400,
-    },
-    {
-      text: "캡사이신",
-      value: 100,
-    },
-    {
-      text: "설탕",
-      value: 30,
-    },
-    {
-      text: "소금",
-      value: 64,
-    },
-    {
-      text: "초장",
-      value: 400,
-    },
-    {
-      text: "쌈장",
-      value: 100,
-    },
-    {
-      text: "오이고추",
-      value: 30,
-    },
-    {
-      text: "청양고추",
-      value: 64,
-    },
-    {
-      text: "라면",
-      value: 400,
-    },
-    {
-      text: "물고기",
-      value: 100,
-    },
-    {
-      text: "꼬치",
-      value: 30,
-    },
-    {
-      text: "어묵",
-      value: 64,
-    },
-    {
-      text: "순대",
-      value: 400,
-    },
-    {
-      text: "떡볶이",
-      value: 100,
-    },
-    {
-      text: "시래기",
-      value: 30,
-    },
-    {
-      text: "깻잎",
-      value: 64,
-    },
-    {
-      text: "마늘",
-      value: 400,
-    },
-    {
-      text: "상추",
-      value: 100,
-    },
-    {
-      text: "고기",
-      value: 30,
-    },
-  ];
+  useEffect(() => {
+    setText(wordCloud ? wordCloud[0].word : "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    queryclient.invalidateQueries({ queryKey: ["useGetKeywordByNew"] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
 
   const callbacks = {
     getWordColor: () => "#6a74c9",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onWordClick: (e: any) => {
+      setText(e.text);
+    },
   };
 
   const options: Optional<Options> = {
@@ -103,7 +40,13 @@ export const WordCloudWords = () => {
 
   return (
     <Container>
-      <ReactWordcloud words={words} options={options} callbacks={callbacks} />
+      {wordCloud && (
+        <ReactWordcloud
+          words={wordCloud.map(item => ({ text: item.word, value: item.count }))}
+          options={options}
+          callbacks={callbacks}
+        />
+      )}
     </Container>
   );
 };

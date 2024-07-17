@@ -8,13 +8,22 @@ type PropsType = {
 export const MyPageTab = ({ tabName }: PropsType) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  const select = (): boolean => {
+    if (tab) {
+      return tab === (tabName === "피드" ? "feed" : "scrap");
+    } else {
+      return tabName === "피드" ? true : false;
+    }
+  };
 
   return (
     <Radio
       onClick={() => {
         navigate(`/mypage?tab=${tabName === "피드" ? "feed" : "scrap"}`);
       }}
-      $isSelect={searchParams.get("tab") === (tabName === "피드" ? "feed" : "scrap")}
+      $isSelect={select()}
     >
       <span className="name">{tabName}</span>
     </Radio>

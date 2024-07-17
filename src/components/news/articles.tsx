@@ -1,24 +1,19 @@
-import { useRef } from "react";
 import styled from "styled-components";
 import { Article } from "@/components";
+import { useGetKeywordByNew } from "@/apis";
+import { useNewsCategory } from "@/stores";
 
 export const Articles = () => {
-  const target = useRef(null);
+  const { date, category, text } = useNewsCategory();
+  const { data, isLoading } = useGetKeywordByNew(date, category, text);
 
   return (
     <Container>
-      <Title>asdf</Title>
-      <Row id="scrollArea">
-        {[].length === 0
-          ? null
-          : [].map((article, index) => (
-              <Article key={index} articleId={1} title={""} thumbnail={""} kind={""} company={""} />
-            ))}
-        {[].length === 0 ? (
-          "No Content"
-        ) : (
-          <div ref={target} style={{ opacity: "0", height: "30px", width: "100%", backgroundColor: "red" }} />
-        )}
+      <Title>{text}</Title>
+      <Row>
+        {data && data?.length
+          ? data.map((article, index) => <Article key={index} isLast={data.length - 1 === index} article={article} />)
+          : !isLoading && "No Content"}
       </Row>
     </Container>
   );
@@ -31,23 +26,22 @@ const Container = styled.div`
   border-radius: 16px;
   margin-top: 1% 0;
   color: #cccccc;
-  padding: 1% 3%;
-  box-sizing: border-box;
-  position: relative;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const Title = styled.div`
-  position: absolute;
-  top: 40px;
-  left: 40px;
   font-size: 32px;
   font-style: normal;
+  color: #000;
   font-weight: 600;
-  line-height: normal;
 `;
 
 const Row = styled.div`
-  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   overflow-y: scroll;
-  max-height: 80%;
 `;

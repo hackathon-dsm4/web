@@ -1,13 +1,15 @@
 import { Search } from "@/assets/images";
-import { useState } from "react";
 import styled from "styled-components";
 
-export const MyPageSearch = () => {
-  const [keyword, setKeyword] = useState("");
+type PropsType = {
+  value: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
+export const MyPageSearch = ({ value, handleChange }: PropsType) => {
   return (
     <SearchContainer>
-      <SearchBox value={keyword} onChange={e => setKeyword(e.target.value)} placeholder="검색어를 입력하세요" />
+      <SearchBox name="keyword" value={value} onChange={handleChange} placeholder="검색어를 입력하세요" />
       <SearchImg src={Search} alt="검색 버튼" height={24} />
     </SearchContainer>
   );
@@ -25,7 +27,7 @@ const SearchContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 48px;
-  border: 1px solid #6a74c9;
+  border: 1px solid #cacaca;
   background-color: #fff;
   border-radius: 4px;
   position: relative;

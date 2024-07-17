@@ -1,28 +1,41 @@
 import styled from "styled-components";
 import { Pagination } from "@mui/material";
 import { NoContentComponent, ScrapComponent, Stack } from "@/components";
+import { useGetMyShare } from "@/apis";
+import { useState } from "react";
+import { useMyPage } from "@/stores";
 
 export const MyPageScrap = () => {
+  const { data } = useGetMyShare();
+  const [page, setPage] = useState<number>(1);
+  const { keyword } = useMyPage();
+
   return (
     <ScrapContainer>
-      {false ? (
-        <NoContentComponent text={"스크랩한 기사가 존재하지 않습니다."} />
-      ) : (
+      {data?.length ? (
         <Container>
           <ScrapWrapper>
             <Scraps>
-              {Array.from({ length: 7 }, (scrap, idx) => (
-                <ScrapComponent key={idx} deleteScrap={""} scrapId={""} articleId={""} image={""} title={""} />
-              ))}
-              {Array.from({ length: 5 }, (scrap, idx) => (
+              {data
+                ?.filter(item => item.title.includes(keyword))
+                .map((scrap, idx) => <ScrapComponent key={idx} scrap={scrap} />)}
+              {Array.from({ length: 5 }, (_, idx) => (
                 <div key={idx} style={{ width: "170px" }} />
               ))}
             </Scraps>
           </ScrapWrapper>
           <Stack width="100%" justify="center" margin="32px 0">
-            <Pagination count={10} page={1} onChange={(event, value) => {}} />
+            <Pagination
+              count={data?.length}
+              page={page}
+              onChange={(_, value) => {
+                setPage(value);
+              }}
+            />
           </Stack>
         </Container>
+      ) : (
+        <NoContentComponent text={"스크랩한 기사가 존재하지 않습니다."} />
       )}
     </ScrapContainer>
   );

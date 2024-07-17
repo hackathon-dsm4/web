@@ -1,12 +1,19 @@
 import styled from "styled-components";
 import { Discription } from "@/components";
 import { Google } from "@/assets/images";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   return (
     <ContentWrap>
       <Discription />
-      <Button onClick={() => {}}>
+      <Button
+        onClick={() => {
+          window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_REDIRECT_URL}&response_type=token&scope=email+profile`;
+        }}
+      >
         <img width={32} height={32} src={Google} alt="" />
         <span style={{ marginTop: "2px" }}>구글로 시작하기</span>
       </Button>

@@ -1,46 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { KeywordByWordResponse, QueryListType } from "@/apis";
+import { NewsType } from "@/@types";
 
-export const Article = ({ articleId, company, kind, title, thumbnail }: any) => {
-  const types = [
-    { kor: "금융", eng: "FINANCE" },
-    { kor: "증권", eng: "STOCK" },
-    { kor: "산업/재계", eng: "INDUSTRY" },
-    { kor: "중기/벤처", eng: "VENTURE" },
-    { kor: "부동산", eng: "REAL_ESTATE" },
-    { kor: "글로벌 경제", eng: "GLOBAL" },
-    { kor: "생활경제", eng: "LIVING" },
-    { kor: "경제 일반", eng: "GENERAL" },
-  ];
+type PropsType = {
+  article: KeywordByWordResponse;
+  isLast: boolean;
+};
 
-  const EngToKorTitle = (eng: any) => {
-    const matchingType = types.find(type => type.eng === eng);
-    if (matchingType) {
-      return matchingType.kor;
-    }
-    return eng;
-  };
-
+export const Article = ({ article, isLast }: PropsType) => {
   return (
     <Container>
-      <Link to={`/news/${articleId}`} style={{ color: "black" }}>
+      <Link to={`/news/${article.queryList[0].id}`} style={{ color: "black" }}>
         <Box>
           <div>
             <div style={{ paddingBottom: "10px" }}>
               <span style={{ color: "navy", fontWeight: "700", paddingRight: "10px", display: "inline" }}>
-                {company}
+                {article.queryList[0].job || "중앙일보"}
               </span>
-              <span style={{ color: "#cacaca", display: "inline" }}>{EngToKorTitle(kind)}</span>
+              <span style={{ color: "#cacaca", display: "inline" }}>{NewsType[article.queryList[0].type]}</span>
             </div>
-            <div>{title.slice(0, 22)}...</div>
+            <div>{article.queryList[0].content.slice(0, 22)}...</div>
           </div>
           <div>
-            <img src={thumbnail} alt="" style={{ width: "80px", height: "60px", borderRadius: "0.5em" }} />{" "}
+            <img
+              src={article.queryList[0].profile}
+              alt=""
+              style={{ width: "80px", height: "60px", borderRadius: "0.5em" }}
+            />{" "}
           </div>
         </Box>
       </Link>
-      <Hr />
+      {!isLast && <Hr />}
     </Container>
   );
 };

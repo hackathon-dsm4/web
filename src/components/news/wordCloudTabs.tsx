@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { NewsKeyType } from "@/@types";
+import { useNewsCategory } from "@/stores";
 import styled, { css } from "styled-components";
 
 export const WordCloudTabs = () => {
@@ -13,16 +14,17 @@ export const WordCloudTabs = () => {
     { kor: "경제 일반", eng: "GENERAL" },
   ];
 
-  const [selectedIdx, setSelectedIdx] = useState(0);
+  const { category, setCategory, resetText } = useNewsCategory();
 
   return (
     <Container>
       {types.map((type, idx) => (
         <Tag
           key={idx}
-          $isSelect={selectedIdx === idx}
+          $isSelect={category === type.eng}
           onClick={() => {
-            setSelectedIdx(idx);
+            setCategory(type.eng as NewsKeyType);
+            resetText();
           }}
         >
           {type.kor}

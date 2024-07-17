@@ -1,19 +1,23 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { MyShareResponse } from "@/apis";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const ScrapComponent = ({ deleteScrap, scrapId, articleId, image, title }: any) => {
-  const navi = useNavigate();
+type PropsType = {
+  scrap: MyShareResponse;
+};
+
+export const ScrapComponent = ({ scrap }: PropsType) => {
+  const navigate = useNavigate();
   return (
     <Card
       onClick={() => {
-        navi(`/news/${articleId}`);
+        navigate(`/news/${scrap.id}`);
       }}
     >
       <CardInner>
         <CardFront>
-          <Image src={image} />
-          <Title>asdfasdf</Title>
+          <Image src={scrap.profile} />
+          <Title>{scrap.title}</Title>
         </CardFront>
       </CardInner>
     </Card>

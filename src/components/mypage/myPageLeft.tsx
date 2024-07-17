@@ -8,6 +8,16 @@ export type TabsType = { no: number; tabName: string; check: boolean; content: R
 
 export const MyPageLeft = () => {
   const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  const select = (tabName: string): boolean => {
+    if (tab) {
+      return tab === (tabName === "피드" ? "feed" : "scrap");
+    } else {
+      return tabName === "피드" ? true : false;
+    }
+  };
+
   const tabs = [
     { no: 0, tabName: "피드", check: true, content: <MyPageFeed /> },
     {
@@ -21,7 +31,7 @@ export const MyPageLeft = () => {
   return (
     <LeftContainer>
       <MyPageLeftTop tabs={tabs} />
-      {tabs.find(item => searchParams.get("tab") === (item.tabName === "피드" ? "feed" : "scrap"))?.content}
+      {tabs.find(item => select(item.tabName))?.content}
     </LeftContainer>
   );
 };

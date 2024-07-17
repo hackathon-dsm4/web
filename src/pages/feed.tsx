@@ -1,15 +1,25 @@
 import styled from "styled-components";
-import { ArticleRank, FeedElement, MyPageSearch, Stack, UserElement } from "@/components";
+import { ArticleRank, FeedElement, MyPageSearch, Stack } from "@/components";
+import { useGetNotice } from "@/apis";
+import { useForm } from "@/hooks";
 
 export const Feed = () => {
+  const { data } = useGetNotice();
+  const { form, handleChange } = useForm({
+    keyword: "",
+  });
+
   return (
     <Stack width="calc(100% - 276px)" margin="0 0 0 276px" padding="40px 100px" justify="space-between">
       <Wrapper>
-        <MyPageSearch />
+        <MyPageSearch value={form.keyword} handleChange={handleChange} />
         <FeedContainer>
-          {[""].map(data => {
-            return <FeedElement data={data} key={data} />;
-          })}
+          {data &&
+            data
+              .filter(item => item.content.includes(form.keyword) || item.title.includes(form.keyword))
+              .map((item, idx) => {
+                return <FeedElement item={item} key={idx} />;
+              })}
         </FeedContainer>
       </Wrapper>
       <BannerContainer>
@@ -23,7 +33,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 65%;
+  width: 60%;
 `;
 
 const FeedContainer = styled.div`
@@ -37,5 +47,5 @@ const BannerContainer = styled.div`
   flex-direction: column;
   gap: 24px;
   overflow-y: auto;
-  width: 30%;
+  width: 35%;
 `;

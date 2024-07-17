@@ -1,54 +1,37 @@
-import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserDefault } from "@/assets/images";
 import { HeartImg, Stack } from "@/components";
+import { NoticeResponse } from "@/apis";
+import { NewsType } from "@/@types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const FeedElement = ({ data }: any) => {
+type PropsType = {
+  item: NoticeResponse;
+};
+
+export const FeedElement = ({ item }: PropsType) => {
   const navigate = useNavigate();
   const moveToProfile = () => {
     navigate(`/mypage`);
   };
 
-  const [moreBtn, setMoreBtn] = useState(false);
-  const textLimit = useRef(170);
-
-  const types = [
-    { kor: "금융", eng: "FINANCE" },
-    { kor: "증권", eng: "STOCK" },
-    { kor: "산업/재계", eng: "INDUSTRY" },
-    { kor: "중기/벤처", eng: "VENTURE" },
-    { kor: "부동산", eng: "REAL_ESTATE" },
-    { kor: "글로벌 경제", eng: "GLOBAL" },
-    { kor: "생활경제", eng: "LIVING" },
-    { kor: "경제 일반", eng: "GENERAL" },
-  ];
-  const kindKor = types.find(type => type.eng === "")?.kor || "기타";
-
   return (
     <Feed>
       <Stack padding="32px 32px" gap={20} align="center">
-        <ProfileImg src={UserDefault} alt={"asdf"} onClick={moveToProfile} style={{ cursor: "pointer" }} />
+        <ProfileImg src={item.userProfile} alt="" onClick={moveToProfile} style={{ cursor: "pointer" }} />
         <Stack width="100%" direction="column" align="space-between">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div onClick={moveToProfile} style={{ fontWeight: 600, cursor: "pointer" }}>
-              asdf
+              {item.userName}
             </div>
-            <HeartImg clicked={true} cnt={1} feedId="12" />
+            <HeartImg clicked={item.click} cnt={item.count} feedId={item.id} />
           </div>
-          <Content>
-            asdfasdf
-            <More onClick={() => setMoreBtn(!moreBtn)}>
-              {1 > textLimit.current && (moreBtn ? " [닫기]" : " ...더보기")}
-            </More>
-          </Content>
+          <Content>{item.content}</Content>
         </Stack>
       </Stack>
       <div style={{ width: "100%", height: "1px", backgroundColor: "#cacaca" }} />
-      <Article to={`/news/${"asdf"}`}>
-        <Label>{kindKor}</Label>
-        asdf
+      <Article to={`/news/${item.newsId}`}>
+        <Label>{NewsType[item.type]}</Label>
+        {item.title}
       </Article>
     </Feed>
   );
@@ -72,11 +55,6 @@ const Content = styled.div`
   margin-top: 8px;
   text-align: justify;
   line-height: 24px;
-`;
-
-const More = styled.span`
-  color: gray;
-  cursor: pointer;
 `;
 
 const Article = styled(Link)`

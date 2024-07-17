@@ -6,6 +6,7 @@ export { default as Search } from "./search.svg";
 export { default as Heart } from "./ic_heart.svg";
 export { default as EmptyHeart } from "./ic_heart_empty.svg";
 export { default as Clock } from "./ic_clock.svg";
+export { default as Plus } from "./plus.svg";
 
 export { default as UserDefault } from "./user_default.png";
 export { default as Logo } from "./logo.png";

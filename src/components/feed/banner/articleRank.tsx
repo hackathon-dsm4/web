@@ -1,40 +1,32 @@
-import { Clock } from "@/assets/images";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Stack, Text } from "@/components";
+import { useGetAllNews } from "@/apis";
+import { NewsType } from "@/@types";
 
 export const ArticleRank = () => {
-  const [articles, setArticles] = useState([]);
+  const { data } = useGetAllNews();
 
   return (
     <Background style={{ gap: 14 }}>
       <BannerTitle>
-        <span>피드에 많이 언급된 기사</span>
-        <span
-          style={{
-            fontSize: "0.75rem",
-            color: "#cacaca",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <img src={Clock} alt="시계" />
-          최근 1시간
-        </span>
+        <span>현재 가장 핫한 기사</span>
       </BannerTitle>
-      {["", "", ""].map((data, index) => {
+      {data?.slice(0, 10).map((item, index) => {
         return (
-          <React.Fragment key={data}>
-            <BannerElement to={`/news/${data}`}>
+          <React.Fragment key={index}>
+            <BannerElement to={`/news/${item.id}`}>
               <span style={{ fontSize: "2.25rem", fontWeight: 500 }}>{index + 1}</span>
               <Stack direction="column" gap={2}>
-                <Text size={16}>asdfasdfasdf</Text>
-                <div style={{ color: "#cacaca", fontSize: "0.75rem" }}>asdfasdf | asdfasdfas</div>
+                <Text size={16}>{item.title}</Text>
+                <div style={{ color: "#cacaca", fontSize: "0.75rem" }}>
+                  {item.job} | {NewsType[item.type]}
+                </div>
               </Stack>
-              {true ? <Thumbnail src={""} alt={data} /> : ""}
+              <Thumbnail src={item.profile} alt={""} />
             </BannerElement>
-            {index !== articles.length - 1 && (
+            {index !== 9 && (
               <div
                 style={{
                   width: "100%",
@@ -73,6 +65,7 @@ const BannerTitle = styled.div`
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
+  color: #000;
 `;
 
 const BannerElement = styled(Link)`

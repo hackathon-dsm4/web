@@ -1,23 +1,20 @@
 import styled from "styled-components";
-import { ColorSpan, Stack, Text } from "@/components";
+import { Stack, Text } from "@/components";
+import { useGetUserInfo } from "@/apis";
 
 export const MyPageRightTop = () => {
+  const { data } = useGetUserInfo();
   const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
 
   return (
     <Background style={{ padding: "1.5rem", gap: "1.25rem" }}>
       <Div>
-        <Image src={imgUrl} />
+        <Image src={data ? data.profile : imgUrl} />
         <Stack direction="column" gap={12}>
-          <NickName>박박박</NickName>
+          <NickName>{data?.nickname}</NickName>
           <FollowInfo>
             <Text size={12} weight={500} color="#cacaca">
-              팔로잉
-              <ColorSpan color="#000"> {10}</ColorSpan>
-            </Text>
-            <Text size={12} weight={500} color="#cacaca">
-              팔로워
-              <ColorSpan color="#000"> {10}</ColorSpan>
+              {data?.email}
             </Text>
           </FollowInfo>
         </Stack>

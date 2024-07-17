@@ -1,41 +1,29 @@
-import { useState } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useNewsCategory } from "@/stores";
 
 export const WordCloudTitle = () => {
-  const [value, setValue] = useState({
-    selected: "",
-    recent: "",
-    last: "",
-  });
-
-  const onChange = (newValue: string) => {
-    setValue(old => ({ ...old, selected: dateFormat(newValue) }));
-  };
-  const dateFormat = (data: string) => {
-    return dayjs(data).format("YYYY-MM-DD");
-  };
+  const { date, setDate, resetText } = useNewsCategory();
 
   return (
     <Container>
       <h1>
-        &nbsp;&nbsp;{dayjs(new Date("2024-07-24")).get("month") + 1}월 {dayjs("2024-07-24").get("date")}일{" "}
-        <Span>인기 키워드</Span>
+        &nbsp;&nbsp;{dayjs(date).get("month") + 1}월 {dayjs(date).get("date")}일 <Span>인기 키워드</Span>
       </h1>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box width={168}>
           <DatePicker
-            value={dayjs(new Date("2024-07-24"))}
+            value={dayjs(date)}
             format="YYYY-MM-DD"
             slotProps={{ textField: { size: "small" } }}
-            minDate={dayjs(value.last)}
-            maxDate={dayjs(value.recent)}
+            maxDate={dayjs()}
             onChange={e => {
-              onChange("");
+              setDate(dayjs(e).format("YYYY-MM-DD"));
+              resetText();
             }}
           />
         </Box>

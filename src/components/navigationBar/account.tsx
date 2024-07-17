@@ -2,20 +2,24 @@ import { UserDefault } from "@/assets/images";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Stack } from "../common";
+import { useGetUserInfo } from "@/apis";
 
 export const Account = () => {
+  const { data } = useGetUserInfo();
+
   return (
     <Stack direction="column" gap={32}>
       <Divider />
       <StyledLink to="/mypage">
-        {"" != null && "" != "" ? (
-          <img src={UserDefault} alt="profileImg" width={20} height={20} style={{ borderRadius: "50%" }} />
-        ) : (
-          <img src={UserDefault} alt="profileImg" width={20} height={20} />
-        )}
-        asdfasdf
+        <img
+          src={data ? data?.profile : UserDefault}
+          alt="profileImg"
+          width={20}
+          height={20}
+          style={{ borderRadius: "50%" }}
+        />
+        {data?.nickname}
       </StyledLink>
-      {"" != null && "" != "" ? <Button onClick={() => {}}>로그아웃</Button> : null}
     </Stack>
   );
 };
@@ -27,23 +31,6 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: #35383b;
   font-size: 1rem;
-`;
-
-const Button = styled.button`
-  position: absolute;
-  transform: translate(170%, -80%);
-  cursor: pointer;
-  font-size: 10px;
-  letter-spacing: 2px;
-  font-weight: bold;
-  padding: 0.7em 2em;
-  border: none;
-  background: white;
-  color: #ccc;
-  &:hover {
-    color: black;
-    transition: 0.5s;
-  }
 `;
 
 const Divider = styled.div`

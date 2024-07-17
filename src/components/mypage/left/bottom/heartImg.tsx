@@ -1,3 +1,4 @@
+import { useFeedLike } from "@/apis/like";
 import { EmptyHeart, Heart } from "@/assets/images";
 import { useState } from "react";
 import styled from "styled-components";
@@ -5,12 +6,17 @@ import styled from "styled-components";
 type PropsType = {
   clicked: boolean;
   cnt: number;
-  feedId: string;
+  feedId: number;
 };
 
 export const HeartImg = ({ clicked, cnt, feedId }: PropsType) => {
+  const { mutate } = useFeedLike(feedId);
   return (
-    <HeartContainer onClick={e => {}}>
+    <HeartContainer
+      onClick={() => {
+        mutate();
+      }}
+    >
       {clicked ? <Img src={Heart} alt="좋아요" /> : <Img src={EmptyHeart} alt="좋아요" />}
       {cnt}
     </HeartContainer>

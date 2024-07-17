@@ -2,23 +2,40 @@ import styled, { css } from "styled-components";
 import { useState } from "react";
 import { Pagination } from "@mui/material";
 import { Search, SelectVoca } from "@/assets/images";
+import { useGetDict } from "@/apis";
+import { useNewsCategory } from "@/stores";
+import { Dictcategory, DictType, NewsType } from "@/@types";
+import { getValueByKey } from "@/utils";
+import { Stack } from "@/components";
 
 export const Dictionary = () => {
   const category = ["경영", "경제", "공공", "과학", "금융", "사회"];
-  const [wordArr, setWordArr] = useState([]);
-  const [type, setType] = useState("");
-  const [currentWord, setCurrentWord] = useState({ word: "" });
+
+  const [type, setType] = useState<DictType>("ETC");
+  const [page, setPage] = useState<number>(1);
+
   const [keyword, setKeyword] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState();
+  const [currentWord, setCurrentWord] = useState<{ type: DictType; word: string; meaning: string }>({
+    type: "ETC",
+    word: "",
+    meaning: "",
+  });
+
+  const { data } = useGetDict(type);
 
   return (
     <MainContainer>
       <ListContainer>
         <CatContainer>
-          <Tag $isSelect={true}>전체</Tag>
+          <Tag $isSelect={Dictcategory[type] === "전체"} onClick={() => setType("ETC")}>
+            전체
+          </Tag>
           {category.map((v, i) => (
-            <Tag $isSelect={false} key={i + 1} onClick={() => setType(v)}>
+            <Tag
+              $isSelect={Dictcategory[type] === v}
+              key={i + 1}
+              onClick={() => setType(getValueByKey(Dictcategory, v) as DictType)}
+            >
               {v}
             </Tag>
           ))}
@@ -28,17 +45,29 @@ export const Dictionary = () => {
           <SearchImg src={Search} alt="검색 버튼" height={24} />
         </SearchContainer>
         <div className="wordlist">
-          {["asdf", "asdf"].map((v, i) => (
-            <WordContainer key={i} onClick={() => {}}>
-              <WordCat>{"fasdf"}</WordCat>
-              <div>{"asd"}</div>
-            </WordContainer>
-          ))}
+          {data
+            ?.filter(item => item.word.includes(keyword))
+            .slice((page - 1) * 6, page * 6)
+            .map((v, i) => (
+              <WordContainer
+                key={i}
+                onClick={() => {
+                  setCurrentWord({
+                    type: v.type,
+                    word: v.word,
+                    meaning: v.meaning,
+                  });
+                }}
+              >
+                <WordCat>{Dictcategory[v.type]}</WordCat>
+                <div>{v.word}</div>
+              </WordContainer>
+            ))}
         </div>
         <Pagination
-          count={totalPage}
-          onChange={(e, value) => setCurrentPage(value)}
-          page={currentPage}
+          count={Math.ceil((data?.length || 0) / 6)}
+          onChange={(_, value) => setPage(value)}
+          page={page}
           defaultPage={1}
         />
       </ListContainer>
@@ -58,21 +87,21 @@ export const Dictionary = () => {
           </>
         ) : (
           <>
-            <div>
+            <Stack direction="column" gap={28}>
               <WordCat
                 style={{
                   width: "64px",
-                  height: "28px",
-                  fontSize: "20px",
+                  height: "32px",
+                  fontSize: "16px",
                 }}
               >
-                asdf
+                {Dictcategory[currentWord.type]}
               </WordCat>
               <div className="word" style={currentWord.word.length > 30 ? { fontSize: "24px" } : {}}>
                 {currentWord.word}
               </div>
-            </div>
-            <div className="meaning">asdf</div>
+            </Stack>
+            <div className="meaning">{currentWord.meaning}</div>
           </>
         )}
       </DetailContainer>
@@ -102,8 +131,8 @@ const ListContainer = styled.div`
   margin-right: 48px;
   .wordlist {
     width: 100%;
-    margin-bottom: 12px;
-    height: 457px;
+    height: 460px;
+    overflow: scroll;
   }
 `;
 
@@ -133,7 +162,7 @@ const Tag = styled.div<{ $isSelect: boolean }>`
   ${({ $isSelect }) =>
     $isSelect &&
     css`
-      background-color: #6a74c9;
+      background-color: #cacaca;
       color: white;
     `}
 `;
@@ -150,22 +179,19 @@ const DetailContainer = styled.div`
   border-radius: 16px;
   border: 1px solid #dfe0e5;
   & > div:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 44px;
+    margin-bottom: 28px;
   }
   .word {
     font-size: 32px;
     color: #2a2b2e;
     font-weight: 600;
-    margin-left: 24px;
   }
   .meaning {
     font-size: 14px;
     color: #494a4e;
     overflow-y: auto;
     text-align: justify;
+    line-height: 20px;
   }
   img {
     width: 240px;
@@ -181,7 +207,7 @@ const SearchContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 48px;
-  border: 1px solid #6a74c9;
+  border: 1px solid #cacaca;
   border-radius: 4px;
   position: relative;
 `;

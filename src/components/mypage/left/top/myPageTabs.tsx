@@ -1,21 +1,24 @@
-import "components/user/mypage/css/Tab.css";
-import { useDispatch } from "react-redux";
-import { setTabNo } from "../../../../../reducer/mypageTabReducer";
+import styled from "styled-components";
+import { TabsType, MyPageTab } from "@/components";
 
-export default function MyPageTab({ no, tabName, isFirst }) {
-  const dispatch = useDispatch();
-
-  const handleChange = e => {
-    dispatch(setTabNo(parseInt(e.currentTarget.value)));
-  };
+export const MyPageTabs = ({ tabs }: { tabs: TabsType[] }) => {
   return (
-    <label class="radio">
-      {isFirst ? (
-        <input type="radio" name="radio" value={no} defaultChecked onChange={handleChange} />
-      ) : (
-        <input type="radio" name="radio" value={no} onChange={handleChange} />
-      )}
-      <span class="name">{tabName}</span>
-    </label>
+    <TabContainer>
+      <RadioInputs>
+        {tabs.map((tab, index) => (
+          <MyPageTab key={index} tabName={tab.tabName} />
+        ))}
+      </RadioInputs>
+    </TabContainer>
   );
-}
+};
+
+const TabContainer = styled.div`
+  width: 100%;
+`;
+
+const RadioInputs = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;

@@ -28,8 +28,8 @@ export const Dictionary = () => {
           <SearchImg src={Search} alt="검색 버튼" height={24} />
         </SearchContainer>
         <div className="wordlist">
-          {wordArr.map((v, i) => (
-            <WordContainer key={i} onClick={() => setCurrentWord(v)}>
+          {["asdf", "asdf"].map((v, i) => (
+            <WordContainer key={i} onClick={() => {}}>
               <WordCat>{"fasdf"}</WordCat>
               <div>{"asd"}</div>
             </WordContainer>
@@ -101,6 +101,7 @@ const ListContainer = styled.div`
   border: 1px solid #dfe0e5;
   margin-right: 48px;
   .wordlist {
+    width: 100%;
     margin-bottom: 12px;
     height: 457px;
   }
@@ -198,15 +199,14 @@ const WordContainer = styled.button`
   outline: none;
   border: none;
   box-sizing: border-box;
-  padding: 0 24px;
+  padding: 0 12px;
   margin-bottom: 12px;
   align-items: center;
-  width: 466px;
+  width: 100%;
   height: 55px;
-  max-height: 55px;
-  border-radius: 16px;
+  border-radius: 4px;
   background-color: #eff4ff;
-  box-shadow: 2px 2px 8px #c9cad1;
+  border: 1px solid #eff4ff;
   & > div:last-child {
     color: #2a2b2e;
     font-size: 14px;
@@ -224,8 +224,8 @@ const WordCat = styled.button`
   color: #2a2b2e;
   font-size: 12px;
   width: 64px;
-  min-width: 64px;
-  height: 28px;
-  border-radius: 12px;
+  height: 32px;
+  border-radius: 4px;
   background-color: #d0d1ff;
+  color: #6a74c9;
 `;

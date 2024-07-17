@@ -1,90 +1,67 @@
 import styled from "styled-components";
-import "components/user/mypage/css/Scrap.css";
 import { useNavigate } from "react-router-dom";
 
-export default function ScrapComponent({ deleteScrap, scrapId, articleId, image, title }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ScrapComponent = ({ deleteScrap, scrapId, articleId, image, title }: any) => {
   const navi = useNavigate();
   return (
-    <ScrapContainer
+    <Card
       onClick={() => {
         navi(`/news/${articleId}`);
       }}
     >
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-front">
-            <Folder src="/images/scrap/folder.png" />
-            <Image src={image}></Image>
-            <Title>{title}</Title>
-            <DismissButton onClick={e => deleteScrap(e, scrapId)}></DismissButton>
-          </div>
-        </div>
-      </div>
-    </ScrapContainer>
+      <CardInner>
+        <CardFront>
+          <Image src={image} />
+          <Title>asdfasdf</Title>
+        </CardFront>
+      </CardInner>
+    </Card>
   );
-}
-
-const ScrapContainer = styled.div`
-  display: flex;
-  margin-top: 60px;
-  margin-left: 63px;
-  margin-right: 45px;
-  margin-bottom: 100px;
-  cursor: pointer;
-`;
+};
 
 const Image = styled.img`
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 140px;
-  height: 100%;
+  height: 80px;
   border-radius: 8px;
-`;
-
-const Folder = styled.img`
-  width: 170px;
-  height: 150px;
-  border-radius: 20px;
-  box-shadow: -3px 3px 6px lightgrey;
   cursor: pointer;
 `;
 
 const Title = styled.div`
-  // display: flex;
-  position: absolute;
-  top: 120%;
-  left: 55%;
-  transform: translate(-50%, -50%);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // white-space: normal;
-  // word-wrap: break-word;
   width: 140px;
-  // height: content;
   font-weight: bold;
   font-size: 0.5em;
   height: 20px;
 `;
 
-const DismissButton = styled.button`
-  position: absolute;
-  left: -40%;
-  top: -60%;
+const Card = styled.div`
+  width: 170px;
+  height: 160px;
+  perspective: 1000px;
+  position: relative;
+  text-align: center;
+`;
+
+const CardInner = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-image: url("/folder.png");
+  padding: 36px 12px 12px 12px;
+`;
+
+const CardFront = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 0.1rem 0.8rem;
-  background-image: url(/images/scrap/scrap_icon.png);
-  background-color: #eff4ff;
-  color: black;
-  border: none;
-  font-size: 1em;
-  font-weight: 600;
-  width: 10px;
-  height: 25px;
-  border-radius: 7px;
-  cursor: pointer;
+  justify-content: space-between;
+  border-radius: 10px;
+  font-size: 24px;
 `;

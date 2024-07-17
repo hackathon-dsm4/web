@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import { News, Login, Dictionary, MyPage } from "@/pages";
+import { News, Feed, Login, Dictionary, MyPage } from "@/pages";
 
 function Router() {
   return (
     <Routes>
-      <Route path="/mypage" element={<MyPage />} />
+      <Route path="/" element={<Feed />} />
       <Route path="*" element={<div>404</div>} />
     </Routes>
   );

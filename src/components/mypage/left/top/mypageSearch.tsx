@@ -19,7 +19,6 @@ const SearchImg = styled.img`
 `;
 
 const SearchContainer = styled.div`
-  box-sizing: border-box;
   padding-left: 40px;
   margin-bottom: 20px;
   display: flex;
